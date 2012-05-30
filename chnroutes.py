@@ -55,7 +55,11 @@ def generate_linux(metric):
     #!/bin/bash
     export PATH="/bin:/sbin:/usr/sbin:/usr/bin"
     
-    OLDGW=`ip route show | grep '^default' | sed -e 's/default via \\([^ ]*\\).*/\\1/'`
+    OLDGW=$1
+    
+    if [ -z "$OLDGW" ]; then
+        OLDGW=`ip route show | grep '^default' | sed -e 's/default via \\([^ ]*\\).*/\\1/'`
+    fi
     
     if [ $OLDGW == '' ]; then
         exit 0
@@ -86,7 +90,7 @@ def generate_linux(metric):
     downfile.write('\n')
     
     for ip,_,mask in results:
-        upfile.write('route add %s/%s via $OLDGW\n'%(ip,mask))
+        upfile.write('route replace %s/%s via $OLDGW\n'%(ip,mask))
         downfile.write('route del %s/%s\n'%(ip,mask))
 
     upfile.write('EOF\n')
