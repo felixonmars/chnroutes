@@ -16,13 +16,13 @@ def generate_ovpn(metric):
     
     OLDGW=$(ip route show 0/0 | head -n1 | grep 'via' | grep -Po '\d+\.\d+\.\d+\.\d+')
 
-    sudo ip -batch - <<EOF
+    ip -batch - <<EOF
     """)
     
     downscript_header=textwrap.dedent("""\
     #!/bin/sh
     
-    sudo ip -batch - <<EOF
+    ip -batch - <<EOF
     """)
     
     upfile=open('vpnup.sh','w')
@@ -69,7 +69,7 @@ def generate_linux(metric):
         echo $OLDGW > /tmp/vpn_oldgw
     fi
     
-    ip -batch - <<EOF
+    sudo ip -batch - <<EOF
     """)
     
     downscript_header=textwrap.dedent("""\
@@ -78,7 +78,7 @@ def generate_linux(metric):
     
     OLDGW=`cat /tmp/vpn_oldgw`
     
-    ip -batch - <<EOF
+    sudo ip -batch - <<EOF
     """)
     
     upfile=open('ip-pre-up','w')
